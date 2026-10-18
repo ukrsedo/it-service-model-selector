@@ -1,0 +1,12 @@
+const assert=require('node:assert/strict'),P=require('./docs/prt.js');
+const decide=(critical,supplierReuse,complementarity)=>P.decide({critical,supplierReuse},{complementarity});
+assert(decide('customer','reusable','complementary').title.startsWith('Customer unified'));
+assert(decide('supplier','reusable','complementary').title.startsWith('Supplier unified'),'Reuse alone must not assign ownership to the customer');
+assert(!decide('both','reusable','complementary').alternative.includes('JV'));
+assert(decide('both','reusable','complementary').alternative.includes('benefit sharing separately'));
+assert(decide('customer','reusable','independent').title.startsWith('Separate'));
+assert(decide('supplier','specific','independent').title.startsWith('Separate'));
+assert(decide('customer','reusable','unknown').title.startsWith('Establish'));
+assert(decide('unknown','unknown','complementary').title.includes('still to be determined'));
+require('./check-ui.cjs');
+console.log('PASS: ownership branches, strict complementarity, both-critical alternatives, unknowns and no automatic ownership from supplier reuse.');

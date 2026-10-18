@@ -1,0 +1,13 @@
+const assert=require('node:assert/strict'),S=require('./docs/model.js');
+const a=(x)=>S.assess({...S.empty,...x});
+assert.equal(S.assess(S.examples.sap).key,'managed');assert(S.assess(S.examples.sap).conditions.length);assert(S.assess(S.examples.sap).ownershipOpen);
+assert.equal(S.assess(S.examples.capacity).key,'staff');assert.equal(S.assess(S.examples.project).key,'outsource');assert.equal(S.assess(S.examples.standard).key,'service');assert.equal(a({}).key,null);
+assert(a({need:'ongoing',direction:'customer',capability:'no'}).conditions.some(x=>x.includes('cannot currently manage')));assert.equal(a({need:'ongoing',direction:'customer'}).key,'staff');
+assert(a({need:'standard',direction:'supplier',standard:'no',outputs:'yes'}).conditions.length);
+assert(a({supplierReuse:'partly',funding:'mixed'}).ownership.some(x=>x.includes('separately')));
+assert(a({controlEffect:'no',control:'customer'}).ownership.some(x=>x.includes('Do not recommend transferring ownership')));
+assert(a({exit:'no'}).priorities.some(x=>x.includes('ownership alone is insufficient')));
+assert(a({need:'ongoing',direction:'supplier',outputs:'yes'}).status==='Delivery model fits stated inputs');
+assert.equal(a({need:'ongoing',direction:'supplier',outputs:'yes',supplierReuse:'specific'}).key,a({need:'ongoing',direction:'supplier',outputs:'yes',supplierReuse:'reusable'}).key,'Reuse changes ownership advice, not delivery classification');
+const fs=require('fs'),html=fs.readFileSync('docs/index.html','utf8'),js=fs.readFileSync('docs/app.js','utf8');for(const id of ['deliveryFields','investmentFields','result','inputs','sap','clear','comparison'])assert(html.includes('id="'+id+'"'));
+new (require('vm').Script)(js);console.log('PASS: four models, unknowns, conflicting responsibilities, readiness gates, ownership limitations and SAP funding split.');

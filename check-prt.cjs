@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),P=require('./docs/prt.js'),S=require('./docs/model.js');
+const asset=x=>({...P.blankAsset(),name:'Automation',...x});
+const run=(x,c={})=>P.assess(S.empty,[asset(x)],c);
+let r=run({kind:'reusable',owner:'supplier',rights:'term',replacement:'no',funding:'fee'},{payment:'fixed',recoveryMonths:'6'});
+assert(r.rows[0].position.includes('Evaluate supplier ownership'));assert(r.rows[0].checks.some(x=>x.includes('Access ends')));assert(r.rows[0].checks.some(x=>x.includes('ownership alone')));assert(r.recovery.some(x=>x.includes('6 months')));assert(r.incentives.some(x=>x.includes('supplier margin')));
+r=run({kind:'bespoke',owner:'customer',rights:'ownership',replacement:'yes',funding:'upfront'},{payment:'hourly'});assert(r.rows[0].position.includes('customer ownership or sufficient lasting rights'));assert.equal(r.rows[0].status,'Position to negotiate');assert(r.rows[0].why.some(x=>x.includes('supplier')));assert.equal(r.recovery.length,0);assert(r.incentives.some(x=>x.includes('reduce billable revenue')));
+r=run({kind:'mixed'});assert(r.rows[0].position.includes('Separate reusable'));assert(r.open);
+r=run({kind:'bespoke',owner:'supplier',rights:'ownership'});assert.equal(r.rows[0].status,'Clarify conflicting answers');
+r=run({});assert(r.rows[0].position.includes('Establish'));assert.equal(r.rows[0].missing.length,5);assert.equal(P.assess(S.empty,[P.blankAsset()],{}).rows.length,0);
+const sap=P.assess(S.examples.sap,P.sapAssets(),{});assert.equal(sap.rows.length,2);assert(sap.rows.every(x=>x.status==='Provisional: evidence needed'));assert.equal(P.sapAssets()[0].owner,'unknown');assert.equal(P.sapAssets()[0].rights,'unknown');assert(sap.recovery.some(x=>x.includes('proposed recovery period')));
+console.log('PASS: per-asset ownership, continuing rights, replacement feasibility, unknowns, conflicts, upfront/fee recovery, fixed/hourly incentives and SAP facts.');

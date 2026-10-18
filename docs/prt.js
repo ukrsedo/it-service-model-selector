@@ -31,8 +31,16 @@ function benefits(relationship={}){
   if(m==='savings'){key='gainshare';title='Start with contractual gainsharing';why='Both parties need an improvement incentive, and the resulting savings can be measured and attributed.';checks=['Agree the savings baseline, eligible costs and measurement period.','Agree each party’s contribution, sharing formula, verification and service-quality safeguards.'];}
   else if(m==='revenue'){key='revenue';title='Start with contractual revenue sharing';why='Both parties need an improvement incentive, and additional revenue can be measured and attributed.';checks=['Define eligible additional revenue, attribution, exclusions and reporting.','Agree each party’s contribution, sharing formula and verification.'];}
   else if(m==='both'){key='combined';title='Start with gainsharing and revenue sharing';why='Both savings and additional revenue can be measured and attributed.';checks=['Set separate baselines and formulas for savings and revenue; avoid double counting.','Agree contributions, verification, quality safeguards and when benefits are paid.'];}
+  else if(['performance','savings_performance','revenue_performance','all'].includes(m)){
+   const financial=m==='savings_performance'?'gainsharing':m==='revenue_performance'?'revenue sharing':m==='all'?'gainsharing and revenue sharing':null;
+   key=m==='performance'?'performance':'combined_performance';
+   title=financial?'Combine '+financial+' with performance incentives':'Start with measurable performance incentives';
+   why='Both parties need an improvement incentive. Recognise measurable improvements in speed, availability, reliability or service quality'+(financial?' alongside the financial benefits.':', even where no savings or additional revenue are demonstrated.');
+   checks=['Agree the performance baseline, KPI improvement targets, attribution, measurement period and verification.','Agree the reward for achieved improvement, such as a performance bonus; do not assume a monetary value for better performance.'];
+   if(financial)checks.push('Set a separate formula and baseline for '+financial+'. Avoid paying twice for the same benefit and retain service-quality safeguards.');
+  }
   else if(m==='no'){key='measurement';title='Establish a measurable benefit before agreeing a share';why='Both parties need incentives, but the claimed benefits cannot currently be measured and attributed.';checks=['Test a measurement pilot or use agreed milestones and performance incentives.','A JV does not solve the missing measurement basis by itself.'];}
-  else {key='measurement';title='Identify what benefits can be measured and shared';why='Both parties need an improvement incentive. Confirm whether savings, additional revenue or neither can be reliably attributed.';}
+  else {key='measurement';title='Identify what benefits can be measured and shared';why='Both parties need an improvement incentive. Confirm whether savings, additional revenue or improved performance can be reliably measured and attributed.';}
  }
  let governance={key:'unknown',title:'Joint control: not established',why:'Confirm whether joint ownership and ongoing investment decisions are actually needed. Benefit sharing alone does not require a JV.'};
  if(j==='no')governance={key:'contract',title:'No JV indicated',why:'Use contractual arrangements for any benefit sharing; retain the separately recommended asset ownership.'};

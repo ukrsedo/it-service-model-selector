@@ -36,3 +36,7 @@ This prototype applies transparent screening rules. It does not calculate an eco
 
 - Hart and Moore (1990), *Property Rights and the Nature of the Firm*: https://dash.harvard.edu/entities/publication/73120378-84b8-6bd4-e053-0100007fdf3b
 - Segal and Whinston, *Property Rights*: https://web.stanford.edu/~isegal/prights.pdf
+
+
+## Prototype 6
+Comparison table appears immediately below the four service-model tiles. Benefit options include measurable performance improvements alone or combined with savings/revenue. Performance recommendations specify baselines, KPI improvement targets and verification; they do not impute financial savings or trigger a JV. JSON exports retain the chosen combination and updated recommendations.
